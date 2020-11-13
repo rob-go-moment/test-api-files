@@ -12,20 +12,28 @@ servers:
     description: Sandbox server
 
 tags:
-  - name: Visits
+  - name: visits
     description: Create or update guest visits
+    x-displayName: Visits
+  - name: visit_model
+    x-displayName: Visit Object
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/VisitObject" />
 
 x-tagGroups:
   - name: Guest Routes
     tags:
-      - Visits
+      - visits
+  - name: Models
+    tags:
+      - visit_model
 
 
 paths:
   /visits:
     post:
       tags:
-        - Visits
+        - visits
       summary: Visits
       security:
         - ApiKeyAuth: []
