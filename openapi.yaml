@@ -11,10 +11,22 @@ servers:
   - url: https://sandbox.gomoment.com/api/v1
     description: Sandbox server
 
+tags:
+  - name: visits
+    description: Create guest visits
+
+x-tagGroups:
+  - name: Guest Routes
+    tags:
+      - visits
+
+
 paths:
   /visits:
     post:
-      summary: Send visit updates to Ivy Instance
+      tags:
+        - visits
+      summary: Visits
       security:
         - ApiKeyAuth: []
       requestBody:
@@ -26,7 +38,9 @@ paths:
       responses:
         '200':
           description: |
-            ## Visit successfully created
+            ## Request Received
+            Request was successfully received and there are no
+            issues with the RequestBody
           content:
             'application/json':
               schema:
