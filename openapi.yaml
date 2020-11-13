@@ -39,6 +39,9 @@ x-tagGroups:
 
 
 paths:
+
+# Visits Endpoint
+
   /visits:
     post:
       tags:
@@ -61,7 +64,7 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                $ref: '#/components/schemas/VisitSuccessResponse'
               examples:
                 SuccessResponse:
                   value:
@@ -103,6 +106,8 @@ paths:
               example:
                 code: 422
                 message: 'Missing parameter {missing_field}'
+
+# Smart Response Endpoint
   /replies:
     post:
       tags:
@@ -128,22 +133,21 @@ paths:
           description: |
             ## Request Received
             Request was successfully received and there are no
-            issues with the RequestBody
+            issues with the provided parameters
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              examples:
-                SuccessResponse:
-                  value:
-                    received_records: 2
-                    valid_records: 2
-                    errors: []
-                SuccessErrorResponse:
-                  value:
-                    received_records: 2
-                    valid_records: 1
-                    errors: ["+123 is an invalid number"]
+                $ref: '#/components/schemas/SRSuccessResponse'
+              example:
+                value:
+                  smart_response_name: Wifi Info
+                  smart_response_content: The wifi password is 1234
+                  message: The wifi password is 1234
+                  ai_intent:
+                      intent_name: Wifi Info
+                      confidence_level: 95.20
+                      sentiment_score: 0.0
+
         '400':
           description: |
             ## Request Parameter Error
@@ -166,7 +170,9 @@ paths:
 # Components
 components:
   schemas:
-    SuccessResponse:
+
+    # Success Responses
+    VisitSuccessResponse:
       type: object
       properties:
         received_records:
@@ -182,6 +188,38 @@ components:
             description: |
               Describes errors that may be received.
               The most common error is that an invalid number was entered
+
+    SRSuccessResponse:
+      type: object
+      description: |
+        ## Smart Response Object
+        Provides content and AI intent detected
+      properties:
+        smart_response_name:
+          type: string
+          description: Maps to "Topic" in Ivy Setup
+        smart_response_content:
+          type: string
+          description: Maps to "Ivy AI Smart Responses" in Ivy Setup
+        message:
+          type: string
+          description: Maps to "Ivy AI Smart Responses" in Ivy Setup
+        ai_intent:
+          type: object
+          properties:
+            intent_name:
+              type: string
+              description: Intent recognized by AI
+            confidence_level:
+              type: number
+              format: float
+              description: Confidence level of intent recognition
+            sentiment_score:
+              type: number
+              format: float
+              description: "Guest sentiment ranging from -1.0 to +1.0"
+
+    # Error Responses
     GeneralError:
       type: object
       properties:
@@ -191,6 +229,8 @@ components:
           type: string
     UnauthorizedError:
       description: API key is missing or invalid
+
+    # Input Schemas
     VisitsArray:
       type: object
       properties:
@@ -314,11 +354,12 @@ components:
         Incoming message type.  The most common is SMS
       items:
         type: string
-      enum:
-        - Webchat
-        - SMS
-        - Email
-        - WhatsApp
+        enum:
+          - Webchat
+          - SMS
+          - Email
+          - WhatsApp
+        example: SMS
 
 
   securitySchemes:
