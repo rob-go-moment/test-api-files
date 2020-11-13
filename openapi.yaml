@@ -12,20 +12,20 @@ servers:
     description: Sandbox server
 
 tags:
-  - name: visits
+  - name: Visits
     description: Create or update guest visits
 
 x-tagGroups:
   - name: Guest Routes
     tags:
-      - visits
+      - Visits
 
 
 paths:
   /visits:
     post:
       tags:
-        - visits
+        - Visits
       summary: Visits
       security:
         - ApiKeyAuth: []
