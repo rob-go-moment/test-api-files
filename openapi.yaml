@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: Go Moment API Reference
+  description:
+    The Go Moment API is organized around [REST](http://en.wikipedia.org/wiki/Representational_State_Transfer)
+  version: "1.0.0"
+
+servers:
+  - url: https://ivy.gomoment.com/api/v1
+    description: Production server
+  - url: https://sandbox.gomoment.com/api/v1
+    description: Sandbox server
+
+security: [{}]
+
+paths:
+  /visits:
+    post:
+      summary: Send visit updates to Ivy Instance
+      requestBody:
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/VisitsArray'
+          required: true
+      responses:
+        '200':
+          description: Visit successfully created
+        '401':
+          description: NA
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+
+
+# Components
+components:
+  schemas:
+    GeneralError:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    VisitsArray:
+      type: object
+      properties:
+        visits:
+          description: The visits array can contain one or more visits objects
+          type: array
+          items:
+            $ref: '#/components/schemas/VisitObject'
+    VisitObject:
+      type: object
+      required:
+        - guest_name_first
+        - guest_name_last
+        - guest_mobile_number
+        - check_in_date
+        - status
+      properties:
+        guest_name_first:
+          type: string
+          example: sam
+        guest_name_last:
+          type: string
+        guest_mobile_number:
+          type: string
+        guest_email:
+          type: string
+        room:
+          type: string
+        check_in_date:
+          type: string
+        check_out_date:
+          type: string
+        check_out_time:
+          type: string
+        status:
+          type: string
+          description: |
+            Pre = Pre-Arrival (if enabled)
+            CI = Check In
+            CO = Check Out
+            CL = Cancelled or Invalid
+          enum:
+            - Pre
+            - CI
+            - CO
+            - CL
+        tags:
+          type: object
+          $ref: '#/components/schemas/VisitTagItem'
+
+    VisitTagItem:
+      type: object
+      properties:
+        add:
+          type: array
+          items:
+            type: string
+        remove:
+          type: array
+          items:
+            type: string
