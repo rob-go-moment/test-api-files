@@ -4,6 +4,9 @@ info:
   description:
     The Go Moment API is organized around [REST](http://en.wikipedia.org/wiki/Representational_State_Transfer)
   version: "1.0.0"
+  x-logo:
+      url: https://www.gomoment.com/wp-content/uploads/2020/11/gm_logo.png
+      altText: Ivy Logo
 
 servers:
   - url: https://ivy.gomoment.com/api/v1
@@ -15,6 +18,9 @@ tags:
   - name: visits
     description: Create or update guest visits
     x-displayName: Visits
+  - name: smart_response
+    description: Return Smart Response based on incoming message
+    x-displayName: Smart Response
   - name: visit_model
     x-displayName: Visit Object
     description: |
@@ -24,6 +30,9 @@ x-tagGroups:
   - name: Guest Routes
     tags:
       - visits
+  - name: Messaging Routes
+    tags:
+      - smart_response
   - name: Models
     tags:
       - visit_model
@@ -64,7 +73,6 @@ paths:
                     received_records: 2
                     valid_records: 1
                     errors: ["+123 is an invalid number"]
-
         '400':
           description: |
             ## Request Body Error
@@ -95,6 +103,64 @@ paths:
               example:
                 code: 422
                 message: 'Missing parameter {missing_field}'
+  /replies:
+    post:
+      tags:
+        - smart_response
+      summary: Smart Response
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: content
+          description: |
+            Incoming message content
+          schema:
+            type: string
+          example: "What's the wifi password?"
+          required: true
+        - in: query
+          name: content_type
+          schema:
+            $ref: '#/components/schemas/ContentType'
+      responses:
+        '200':
+          description: |
+            ## Request Received
+            Request was successfully received and there are no
+            issues with the RequestBody
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    received_records: 2
+                    valid_records: 2
+                    errors: []
+                SuccessErrorResponse:
+                  value:
+                    received_records: 2
+                    valid_records: 1
+                    errors: ["+123 is an invalid number"]
+        '400':
+          description: |
+            ## Request Parameter Error
+            Error in request parameters. Check to make sure your request
+            conforms with the provided schemas.
+        '401':
+          description: |
+            ## Unauthorized Access
+            Check your authorization to make sure that you have string =
+            "Token token = API_KEY"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+              example:
+                code: 401
+                message: 'HTTP Token: Access Denied'
 
 
 # Components
@@ -202,7 +268,7 @@ components:
         custom_event:
           type: string
           description: |
-            ## Custom Events
+            ### Custom Events
             These events have custom keys that recognize a descrete value.
             Custom events are used to trigger automated campaigns once the appropriate
             value has been received.
@@ -213,7 +279,6 @@ components:
         extra:
           type: object
           $ref: '#/components/schemas/CustomTags'
-
 
     VisitTagItem:
       type: object
@@ -242,6 +307,19 @@ components:
       properties:
         CustomTag:
           type: string
+    ContentType:
+      type: array
+      description: |
+        ### Content Types
+        Incoming message type.  The most common is SMS
+      items:
+        type: string
+      enum:
+        - Webchat
+        - SMS
+        - Email
+        - WhatsApp
+
 
   securitySchemes:
     ApiKeyAuth:
