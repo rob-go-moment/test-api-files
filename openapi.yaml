@@ -6,9 +6,9 @@ info:
 
     # Authentication
 
-    Go Moment authentication uses an API_KEY to allow for secure authorization. \s\s
+    Go Moment authentication uses an API_KEY to allow for secure authorization.
 
-    In the Authorization header, the parameter value must be "Token token=API_KEY" (no spaces) \s\s
+    In the Authorization header, the parameter value must be "Token token=API_KEY" (no spaces)
 
     <SecurityDefinitions />
   version: "1.0.0"
@@ -123,6 +123,13 @@ paths:
       summary: Smart Response
       security:
         - ApiKeyAuth: []
+      x-codeSamples:
+        - lang: 'cURL'
+          source: |
+            curl -X POST \
+            'https://ivy.gomoment.com/api/v1/replies?content='What\'s the wifi password?'&content_type=sms&content_type=whatsapp' \
+            -H 'Authorization: Token token=YOUR_API_KEY'
+
       parameters:
         - in: query
           name: content
@@ -139,11 +146,11 @@ paths:
           examples:
             single:
               value:
-                - SMS
+                - sms
             multi:
               value:
-                - SMS
-                - WhatsApp
+                - sms
+                - whatsapp
       responses:
         '200':
           description: |
@@ -402,10 +409,10 @@ components:
       items:
         type: string
         enum:
-          - Webchat
-          - SMS
-          - Email
-          - WhatsApp
+          - webchat
+          - sms
+          - email
+          - whatsapp
 
 
 
