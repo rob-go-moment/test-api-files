@@ -85,7 +85,7 @@ paths:
                       "gold"
                     ],
                     "remove": [
-                      "silver"
+                      "silver", "diamond"
                     ]
                   },
             "extra": {
@@ -408,15 +408,9 @@ components:
         tags:
           type: object
           $ref: '#/components/schemas/VisitTagItem'
-          example:
-            add:
-              - "gold"
-            remove:
-              - "silver"
         extra:
           type: object
           $ref: '#/components/schemas/CustomTags'
-          example: value
 
     VisitTagItem:
       type: object
@@ -434,6 +428,12 @@ components:
           type: array
           items:
             type: string
+      example:
+        add:
+          - gold
+        remove:
+          - silver
+          - diamond
     CustomTags:
       type: object
       description: |
@@ -445,6 +445,7 @@ components:
       properties:
         CustomTag:
           type: string
+          example: value
     ContentType:
       type: array
       description: |
