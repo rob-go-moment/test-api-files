@@ -1,8 +1,16 @@
 openapi: 3.0.0
 info:
   title: Go Moment API Reference
-  description:
+  description: |
     The Go Moment API is organized around [REST](http://en.wikipedia.org/wiki/Representational_State_Transfer)
+
+    # Authentication
+
+    Go Moment authentication uses an API_KEY to allow for secure authorization. \s\s
+
+    In the Authorization header, the parameter value must be "Token token=API_KEY" (no spaces) \s\s
+
+    <SecurityDefinitions />
   version: "1.0.0"
   x-logo:
       url: https://www.gomoment.com/wp-content/uploads/2020/11/gm_logo.png
@@ -85,7 +93,7 @@ paths:
           description: |
             ## Unauthorized Access
             Check your authorization to make sure that you have string =
-            "Token token = API_KEY"
+            "Token token=API_KEY"
           content:
             'application/json':
               schema:
