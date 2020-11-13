@@ -296,47 +296,48 @@ components:
         check_in_date:
           type: string
           description: |
-            (Default) YYYY-MM-DD
+            (Default) YYYY-MM-DD.
             Please speak to your customer success manager to revise formatting.
           example: '2020-10-10'
         check_in_time:
           description: |
-            (Default) HH:MM
+            (Default) HH:MM.
             Please speak to your customer success manager to revise formatting.
           example: '15:00'
         check_out_date:
           type: string
           description: |
-            (Default) YYYY-MM-DD
+            (Default) YYYY-MM-DD.
             Please speak to your customer success manager to revise formatting.
           example: '2020-10-15'
         check_out_time:
           type: string
           description: |
-            (Default) HH:MM
+            (Default) HH:MM.
             Please speak to your customer success manager to revise formatting.
           example: '12:00'
         opt_in_date:
           type: string
           description: |
-            Date guest opted-in to marketing campaign
-            (Default) YYYY-MM-DD
+            Date guest opted-in to marketing campaign.
+            (Default) YYYY-MM-DD.
             Please speak to your customer success manager to revise formatting.
           example: '2020-10-10'
         opt_in_time:
           type: string
           description: |
-            Time guest opted-in to marketing campaign
-            (Default) HH:MM
+            Time guest opted-in to marketing campaign.
+            (Default) HH:MM.
             Please speak to your customer success manager to revise formatting.
           example: '15:00'
         status:
           type: string
           description: |
-            Pre = Pre-Arrival (if enabled)
-            CI = Check In
-            CO = Check Out
-            CL = Cancelled or Invalid
+            Pre = Pre-Arrival (if enabled),
+            CI = Check In,
+            CO = Check Out,
+            CL = Cancelled or Invalid.
+            Please speak to your customer success manager if you would like to re-map these values.
           enum:
             - Pre
             - CI
@@ -361,8 +362,8 @@ components:
       type: object
       description: |
         Add or remove persistent guest tags.
-        "Add" will include persistent tags to the guest until removed
-        "Remove" will remove the specified persistent tags associated with that guest, if they exist
+        "Add" will include persistent tags to the guest until removed.
+        "Remove" will remove the specified persistent tags associated with that guest, if they exist.
         We recommend that you use the "extra" payload instead.
       properties:
         add:
@@ -376,7 +377,7 @@ components:
     CustomTags:
       type: object
       description: |
-        Allows any key, value pair to be ingested
+        Allows any key, value pair to be ingested.
         "CustomTag" can be any string that is mapped to a value that
         will be tagged to the guest.
         CustomTags can be either visit-only or persistent tags.
