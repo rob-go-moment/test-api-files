@@ -57,6 +57,43 @@ paths:
       summary: Visits
       security:
         - ApiKeyAuth: []
+      x-codeSamples:
+        - lang: 'cURL'
+          source: |
+            curl -X POST \
+            https://ivy.gomoment.com/api/v1/visits \
+            -H 'Authorization: Token token="YOUR_API_KEY"' \
+            -H 'Content-Type: application/json' \
+            -d '{
+            "visits": [
+            {
+            "guest_name_first": "First",
+            "guest_name_last": "Last",
+            "guest_mobile_number": "+18558881234",
+            "guest_email": "first.last@gomoment.com",
+            "room": "1234",
+            "check_in_date": "2020-10-10",
+            "check_in_time": "15:00",
+            "check_out_date": "2020-10-15",
+            "check_out_time": "12:00",
+            "opt_in_date": "2020-10-10",
+            "opt_in_time": "15:00",
+            "status": "CI",
+            "custom_event": "ready",
+            "tags": {
+                    "add": [
+                      "gold"
+                    ],
+                    "remove": [
+                      "silver"
+                    ]
+                  },
+            "extra": {
+              "customTag": "value"
+            }
+            }
+            ]
+            }'
       requestBody:
           content:
             'application/json':
@@ -358,6 +395,7 @@ components:
             - CI
             - CO
             - CL
+          example: CI
         custom_event:
           type: string
           description: |
@@ -366,12 +404,19 @@ components:
             Custom events are used to trigger automated campaigns once the appropriate
             value has been received.
             Please speak with your customer success manager to enable.
+          example: ready
         tags:
           type: object
           $ref: '#/components/schemas/VisitTagItem'
+          example:
+            add:
+              - "gold"
+            remove:
+              - "silver"
         extra:
           type: object
           $ref: '#/components/schemas/CustomTags'
+          example: value
 
     VisitTagItem:
       type: object
