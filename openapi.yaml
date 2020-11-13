@@ -128,6 +128,14 @@ paths:
           name: content_type
           schema:
             $ref: '#/components/schemas/ContentType'
+          examples:
+            single:
+              value:
+                - SMS
+            multi:
+              value:
+                - SMS
+                - WhatsApp
       responses:
         '200':
           description: |
@@ -165,6 +173,21 @@ paths:
               example:
                 code: 401
                 message: 'HTTP Token: Access Denied'
+        '422':
+          description: |
+            ## Content Error
+            Either content is invalid or a response cannot be found.
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ContentError'
+              examples:
+                invalid:
+                  value:
+                    message: Content types invalid_here not allowed
+                no_response:
+                  value:
+                    message: Can't find a response for that
 
 
 # Components
@@ -229,6 +252,11 @@ components:
           type: string
     UnauthorizedError:
       description: API key is missing or invalid
+    ContentError:
+      type: object
+      properties:
+        message:
+          type: string
 
     # Input Schemas
     VisitsArray:
@@ -268,30 +296,40 @@ components:
           example: '1400'
         check_in_date:
           type: string
-          description: Must be in YYYY-MM-DD format
+          description: |
+            (Default) YYYY-MM-DD
+            Please speak to your customer success manager to revise formatting.
           example: '2020-10-10'
         check_in_time:
-          description: 'Must be in HH:MM format using a 24-hour notation'
+          description: |
+            (Default) HH:MM
+            Please speak to your customer success manager to revise formatting.
           example: '15:00'
         check_out_date:
           type: string
-          description: Must be in YYYY-MM-DD format
+          description: |
+            (Default) YYYY-MM-DD
+            Please speak to your customer success manager to revise formatting.
           example: '2020-10-15'
         check_out_time:
           type: string
-          description: Must be in HH:MM format
+          description: |
+            (Default) HH:MM
+            Please speak to your customer success manager to revise formatting.
           example: '12:00'
         opt_in_date:
           type: string
           description: |
             Date guest opted-in to marketing campaign
-            Must be in YYYY-MM-DD format
+            (Default) YYYY-MM-DD
+            Please speak to your customer success manager to revise formatting.
           example: '2020-10-10'
         opt_in_time:
           type: string
           description: |
             Time guest opted-in to marketing campaign
-            Must be in HH:MM format
+            (Default) HH:MM
+            Please speak to your customer success manager to revise formatting.
           example: '15:00'
         status:
           type: string
@@ -351,7 +389,8 @@ components:
       type: array
       description: |
         ### Content Types
-        Incoming message type.  The most common is SMS
+        (Optional) Multi-value incoming message type.
+        The most common is SMS.
       items:
         type: string
         enum:
@@ -359,7 +398,7 @@ components:
           - SMS
           - Email
           - WhatsApp
-        example: SMS
+
 
 
   securitySchemes:
