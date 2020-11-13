@@ -127,7 +127,7 @@ paths:
         - lang: 'cURL'
           source: |
             curl -X POST \
-            'https://ivy.gomoment.com/api/v1/replies?content='What is the wifi password?'&content_type=sms&content_type=whatsapp' \
+            'https://ivy.gomoment.com/api/v1/replies?content=wifi&content_type=sms&content_type=whatsapp' \
             -H 'Authorization: Token token=YOUR_API_KEY'
 
       parameters:
@@ -137,7 +137,7 @@ paths:
             Incoming message content
           schema:
             type: string
-          example: "What is the wifi password?"
+          example: "wifi"
           required: true
         - in: query
           name: content_type
