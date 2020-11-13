@@ -11,12 +11,15 @@ servers:
   - url: https://sandbox.gomoment.com/api/v1
     description: Sandbox server
 
-security: [{}]
-
 paths:
   /visits:
+    parameters:
+      - name:
+        in: header
     post:
       summary: Send visit updates to Ivy Instance
+      security:
+        - ApiKeyAuth: []
       requestBody:
           content:
             'application/json':
@@ -27,6 +30,12 @@ paths:
         '200':
           description: Visit successfully created
         '401':
+          description: NA
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/GeneralError'
+        '402':
           description: NA
           content:
             'application/json':
@@ -63,21 +72,49 @@ components:
       properties:
         guest_name_first:
           type: string
-          example: sam
+          example: First
         guest_name_last:
           type: string
+          example: Last
         guest_mobile_number:
           type: string
+          description: |
+            Guest mobile number.
+            This is required in order for Ivy to talk to your guests.
+          example: '+18558881234'
         guest_email:
           type: string
+          example: 'first.last@gomoment.com'
         room:
           type: string
+          example: '1400'
         check_in_date:
           type: string
+          description: Must be in YYYY-MM-DD format
+          example: '2020-10-10'
+        check_in_time:
+          description: 'Must be in HH:MM format using a 24-hour notation'
+          example: '15:00'
         check_out_date:
           type: string
+          description: Must be in YYYY-MM-DD format
+          example: '2020-10-15'
         check_out_time:
           type: string
+          description: Must be in HH:MM format
+          example: '12:00'
+        opt_in_date:
+          type: string
+          description: |
+            Date guest opted-in to marketing campaign
+            Must be in YYYY-MM-DD format
+          example: '2020-10-10'
+        opt_in_time:
+          type: string
+          description: |
+            Time guest opted-in to marketing campaign
+            Must be in HH:MM format
+          example: '15:00'
         status:
           type: string
           description: |
@@ -93,9 +130,16 @@ components:
         tags:
           type: object
           $ref: '#/components/schemas/VisitTagItem'
+        extra:
+          type: object
+          $ref: '#/components/schemas/CustomTags'
+
 
     VisitTagItem:
       type: object
+      description: |
+        Add or remove persistent guest tags.
+        We recommend that you use the "extra" payload instead
       properties:
         add:
           type: array
@@ -105,3 +149,23 @@ components:
           type: array
           items:
             type: string
+    CustomTags:
+      type: object
+      description: |
+        Allows any key, value pair to be ingested
+        "CustomTag" can be any string that is mapped to a value that
+        will be tagged to the guest.
+        CustomTags can be either visit-only or persistent tags.
+        Please speak with a customer sucess manager to enable.
+      properties:
+        CustomTag:
+          type: string
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: API-KEY
+      description: |
+        API key provided by Go Moment.
+        This can be found at Ivy Setup Wizard > Integrations > PMS Integration
