@@ -147,14 +147,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/SRSuccessResponse'
               example:
-                value:
-                  smart_response_name: Wifi Info
-                  smart_response_content: The wifi password is 1234
-                  message: The wifi password is 1234
-                  ai_intent:
-                      intent_name: Wifi Info
-                      confidence_level: 95.20
-                      sentiment_score: 0.0
+                smart_response_name: Wifi Info
+                smart_response_content: The wifi password is 1234
+                message: The wifi password is 1234
+                ai_intent:
+                    intent_name: Wifi Info
+                    confidence_level: 95.20
+                    sentiment_score: 0.0
 
         '400':
           description: |
