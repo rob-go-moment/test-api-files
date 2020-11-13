@@ -13,9 +13,6 @@ servers:
 
 paths:
   /visits:
-    parameters:
-      - name:
-        in: header
     post:
       summary: Send visit updates to Ivy Instance
       security:
@@ -28,24 +25,75 @@ paths:
           required: true
       responses:
         '200':
-          description: Visit successfully created
+          description: |
+            ## Visit successfully created
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              examples:
+                SuccessResponse:
+                  value:
+                    received_records: 2
+                    valid_records: 2
+                    errors: []
+                SuccessErrorResponse:
+                  value:
+                    received_records: 2
+                    valid_records: 1
+                    errors: ["+123 is an invalid number"]
+
+        '400':
+          description: |
+            ## Request Body Error
+            Error in request body. Check to make sure your request
+            conforms with the provided schemas.
         '401':
-          description: NA
+          description: |
+            ## Unauthorized Access
+            Check your authorization to make sure that you have string =
+            "Token token = API_KEY"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+              example:
+                code: 401
+                message: 'HTTP Token: Access Denied'
+        '422':
+          description: |
+            ## Missing Parameter
+            Check to make sure all required fields are included
+            in your API call.
+            Error will provide which field is missing - {missing_field}.
           content:
             'application/json':
               schema:
                 $ref: '#/components/schemas/GeneralError'
-        '402':
-          description: NA
-          content:
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/GeneralError'
+              example:
+                code: 422
+                message: 'Missing parameter {missing_field}'
 
 
 # Components
 components:
   schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        received_records:
+          type: integer
+          description: Number of VisitObjects received
+        valid_records:
+          type: integer
+          description: Number of VisitObjects that are valid
+        errors:
+          type: array
+          items:
+            type: string
+            description: |
+              Describes errors that may be received.
+              The most common error is that an invalid number was entered
     GeneralError:
       type: object
       properties:
@@ -53,6 +101,8 @@ components:
           type: integer
         message:
           type: string
+    UnauthorizedError:
+      description: API key is missing or invalid
     VisitsArray:
       type: object
       properties:
@@ -127,6 +177,14 @@ components:
             - CI
             - CO
             - CL
+        custom_event:
+          type: string
+          description: |
+            ## Custom Events
+            These events have custom keys that recognize a descrete value.
+            Custom events are used to trigger automated campaigns once the appropriate
+            value has been received.
+            Please speak with your customer success manager to enable.
         tags:
           type: object
           $ref: '#/components/schemas/VisitTagItem'
@@ -139,7 +197,9 @@ components:
       type: object
       description: |
         Add or remove persistent guest tags.
-        We recommend that you use the "extra" payload instead
+        "Add" will include persistent tags to the guest until removed
+        "Remove" will remove the specified persistent tags associated with that guest, if they exist
+        We recommend that you use the "extra" payload instead.
       properties:
         add:
           type: array
@@ -165,7 +225,7 @@ components:
     ApiKeyAuth:
       type: apiKey
       in: header
-      name: API-KEY
+      name: Authorization
       description: |
         API key provided by Go Moment.
         This can be found at Ivy Setup Wizard > Integrations > PMS Integration
