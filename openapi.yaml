@@ -4,6 +4,9 @@ info:
   description: |
     The Go Moment API is organized around [REST](http://en.wikipedia.org/wiki/Representational_State_Transfer)
 
+    ### Terms of Service
+    By accessing or using our APIs, you are agreeing to our [Terms of service](https://ivy.gomoment.com/api/v1/docs/terms)
+
     # Authentication
 
     Go Moment authentication uses an API_KEY to allow for secure authorization.
@@ -12,6 +15,7 @@ info:
 
     <SecurityDefinitions />
   version: "1.0.0"
+
   x-logo:
       url: https://www.gomoment.com/wp-content/uploads/2020/11/gm_logo.png
       altText: Ivy Logo
